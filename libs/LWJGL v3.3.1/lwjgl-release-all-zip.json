@@ -1,0 +1,23 @@
+{
+  "build": "release",
+  "mode": "zip",
+  "selectedAddons": [
+    "joml",
+    "lwjglx-debug",
+    "lwjgl3-awt"
+  ],
+  "platform": [
+    "windows"
+  ],
+  "descriptions": false,
+  "compact": false,
+  "hardcoded": false,
+  "javadoc": true,
+  "includeJSON": true,
+  "source": true,
+  "osgi": false,
+  "language": "groovy",
+  "preset": "all",
+  "version": "3.3.1",
+  "versionLatest": "3.3.1"
+}

@@ -1,1 +1,2 @@
-## I wonder what's gonna go here.
+## This game is still in development.
+However if you want to test out the game, you can go to the [.jar files](/prod/) and check 'em out. If you find any problems or things that need to be fixed, you can let the "team" know in the issues tab.
