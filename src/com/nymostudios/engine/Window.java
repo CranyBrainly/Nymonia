@@ -2,8 +2,12 @@ package com.nymostudios.engine;
 
 import com.nymostudios.engine.listeners.KeyListener;
 import com.nymostudios.engine.listeners.MouseListener;
+import com.nymostudios.engine.scenes.LevelEditorScene;
+import com.nymostudios.engine.scenes.LevelScene;
+import com.nymostudios.engine.scenes.Scene;
+import com.nymostudios.util.Time;
+
 import org.lwjgl.Version;
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -26,10 +30,34 @@ public class Window {
 
     private long window;
 
+    private static Scene currentScene = null;
+
+    public float r, b, g;
+
     public Window() {
         this.width = 1000;
         this.height = 500;
         this.title = "Nymoina v1.0.0";
+
+        this.r = 1f;
+        this.g = 1f;
+        this.b = 1f;
+    }
+
+    public static void changeScene(int newScene) {
+        switch (newScene) {
+            case 0:
+                currentScene = new LevelEditorScene();
+                // currentScene.init();
+                break;
+            case 1:
+                currentScene = new LevelScene();
+                // currentScene.init();
+                break;
+            default:
+                assert false : "Unknown Scene '" + newScene + "'.";
+                break;
+        }
     }
 
     public static Window get() {
@@ -104,9 +132,7 @@ public class Window {
 
         // Finally, show the window //
         glfwShowWindow(window);
-    }
-
-    public void loop() {
+        
 		// This line is critical for LWJGL's interoperation with GLFW's
 		// OpenGL context, or any context that is managed externally.
 		// LWJGL detects the context that is current in the current thread,
@@ -114,12 +140,18 @@ public class Window {
 		// bindings available for use.
 		GL.createCapabilities();
 
-        // Testing //
-        glClearColor(1f, 0f, 0f, 1f);
+        Window.changeScene(0);
+    }
+
+    public void loop() {
+        float beginTime = Time.getTime();
+        float endTime;
+        float dt = -1.0f;
+
 
         while(!glfwWindowShouldClose(window)) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the framebuffer
-
+            glClearColor(r, g, b, 1f);
 			glfwSwapBuffers(window); // Swap the color buffers
 
             if (MouseListener.mouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
@@ -128,9 +160,17 @@ public class Window {
                 System.out.println();
             }
 
+            if (dt >= 0) {
+                currentScene.update(dt);
+            }
+
 			// Poll for window events. The key callback above will only be
 			// invoked during this call.
 			glfwPollEvents();
+
+            endTime = Time.getTime();
+            dt = endTime - beginTime;
+            beginTime = endTime;
         }
 
     }
