@@ -48,11 +48,11 @@ public class Window {
         switch (newScene) {
             case 0:
                 currentScene = new LevelEditorScene();
-                // currentScene.init();
+                currentScene.init();
                 break;
             case 1:
                 currentScene = new LevelScene();
-                // currentScene.init();
+                currentScene.init();
                 break;
             default:
                 assert false : "Unknown Scene '" + newScene + "'.";
@@ -148,17 +148,9 @@ public class Window {
         float endTime;
         float dt = -1.0f;
 
-
         while(!glfwWindowShouldClose(window)) {
+            glClearColor(1f, 1f, 1f, 1f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the framebuffer
-            glClearColor(r, g, b, 1f);
-			glfwSwapBuffers(window); // Swap the color buffers
-
-            if (MouseListener.mouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
-                System.out.println("MouseX: " + MouseListener.getX());
-                System.out.println("MouseY: " + MouseListener.getY());
-                System.out.println();
-            }
 
             if (dt >= 0) {
                 currentScene.update(dt);
@@ -167,6 +159,8 @@ public class Window {
 			// Poll for window events. The key callback above will only be
 			// invoked during this call.
 			glfwPollEvents();
+
+			glfwSwapBuffers(window); // Swap the color buffers
 
             endTime = Time.getTime();
             dt = endTime - beginTime;
