@@ -8,35 +8,12 @@ import org.lwjgl.BufferUtils;
 
 import com.nymostudios.engine.renderer.Camera;
 import com.nymostudios.engine.renderer.Shader;
+import com.nymostudios.util.Time;
 
-import static org.lwjgl.opengl.GL20.*; // Shaders
-import static org.lwjgl.opengl.GL30.*; // Rendering
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.*;
 
 public class LevelEditorScene extends Scene{
-
-    private String vertexShaderSrc = "#version 330 core\n" +
-    "\n" +
-    "layout (location = 0) in vec3 aPos;\n" +
-    "layout (location = 1) in vec4 aColor;\n" +
-    "\n" +
-    "out vec4 fColor;\n" +
-    "\n" +
-    "void main() {\n" +
-        "fColor = aColor;\n" +
-        "gl_Position = vec4(aPos, 1.0);\n" +
-    "}";
-
-    private String fragmentShaderSrc = "#version 330 core\n" +
-    "\n" +
-    "in vec4 fColor;\n" +
-    "\n" +
-    "out vec4 color;\n" +
-    "\n" + 
-    "void main() {\n" +
-        "color = fColor;\n" +
-    "}";
-
-    private int vertexID, fragmentID, shaderProgram;
 
     private float[] vertexArray = {
         // Positions             // Colour
@@ -108,10 +85,12 @@ public class LevelEditorScene extends Scene{
         // System.out.println("" + (1 / dt) + "FPS"); // FPS counter
 
         this.camera.position.x -= dt * 50f;
+        this.camera.position.y -= dt * 50f;
 
         defaultShader.use();
         defaultShader.uploadMat4f("uProjection", camera.getProjectionMatrix());
         defaultShader.uploadMat4f("uView", camera.getViewMatrix());
+        defaultShader.uploadFloat("uTime", Time.getTime());
 
         // Bind VAO //
         glBindVertexArray(vaoID);
