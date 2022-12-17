@@ -1,6 +1,11 @@
 package com.nymostudios.engine.scenes;
 
+import com.nymostudios.engine.renderer.Camera;
+
 public abstract class Scene {
+
+    protected Camera camera;
+
     public Scene() {
 
     }

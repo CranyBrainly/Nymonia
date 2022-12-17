@@ -2,8 +2,11 @@ package com.nymostudios.engine.scenes;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+
+import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 
+import com.nymostudios.engine.renderer.Camera;
 import com.nymostudios.engine.renderer.Shader;
 
 import static org.lwjgl.opengl.GL20.*; // Shaders
@@ -36,11 +39,11 @@ public class LevelEditorScene extends Scene{
     private int vertexID, fragmentID, shaderProgram;
 
     private float[] vertexArray = {
-        // Positions          // Colour
-        0.5f, -0.5f, 0.0f,    1.0f, 0.0f, 0.0f, 1.0f, // Bottom Right  // 0
-       -0.5f,  0.5f, 0.0f,    0.0f, 1.0f, 0.0f, 1.0f, // Top Left      // 1
-        0.5f,  0.5f, 0.0f,    0.0f, 0.0f, 1.0f, 1.0f, // Top Right     // 2
-       -0.5f, -0.5f, 0.0f,    1.0f, 1.0f, 0.0f, 1.0f, // Bottom Left   //3
+        // Positions             // Colour
+        100.5f,  -0.5f, 0.0f,    1.0f, 0.0f, 0.0f, 1.0f, // Bottom Right  // 0
+         -0.5f, 100.5f, 0.0f,    0.0f, 1.0f, 0.0f, 1.0f, // Top Left      // 1
+        100.5f, 100.5f, 0.0f,    0.0f, 0.0f, 1.0f, 1.0f, // Top Right     // 2
+         -0.5f,  -0.5f, 0.0f,    1.0f, 1.0f, 0.0f, 1.0f, // Bottom Left   // 3
     };
 
     // NTS: Counter clockwise order //
@@ -51,16 +54,17 @@ public class LevelEditorScene extends Scene{
 
     private int vaoID, vboID, eboID;
 
-    private Shader testShader;
+    private Shader defaultShader;
 
     public LevelEditorScene() {
-        this.testShader = new Shader("src/assets/shaders/default.glsl");
     }
 
     @Override
     public void init() {
 
-        testShader.compile();
+        this.camera = new Camera(new Vector2f());
+        defaultShader = new Shader("src/assets/shaders/default.glsl");
+        defaultShader.compile();
 
         //// Generate VAO, VBO, and EBO buffer objects ////
 
@@ -101,7 +105,13 @@ public class LevelEditorScene extends Scene{
 
     @Override
     public void update(float dt) {
-        testShader.use();
+        // System.out.println("" + (1 / dt) + "FPS"); // FPS counter
+
+        this.camera.position.x -= dt * 50f;
+
+        defaultShader.use();
+        defaultShader.uploadMat4f("uProjection", camera.getProjectionMatrix());
+        defaultShader.uploadMat4f("uView", camera.getViewMatrix());
 
         // Bind VAO //
         glBindVertexArray(vaoID);
@@ -118,6 +128,6 @@ public class LevelEditorScene extends Scene{
 
         glBindVertexArray(0);
         
-        testShader.detach();
+        defaultShader.detach();
     }
 }
