@@ -1,6 +1,6 @@
-package com.nymostudios;
+package net.cranydev;
 
-import com.nymostudios.engine.Window;
+import net.cranydev.engine.Window;
 
 public class Main {
     public static void main(String[] args) throws Exception {

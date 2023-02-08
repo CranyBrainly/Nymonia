@@ -1,4 +1,4 @@
-package com.nymostudios.engine.scenes;
+package net.cranydev.engine.scenes;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -6,9 +6,10 @@ import java.nio.IntBuffer;
 import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 
-import com.nymostudios.engine.renderer.Camera;
-import com.nymostudios.engine.renderer.Shader;
-import com.nymostudios.util.Time;
+import net.cranydev.engine.renderer.Camera;
+import net.cranydev.engine.renderer.Shader;
+import net.cranydev.engine.renderer.Texture;
+import net.cranydev.util.Time;
 
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
@@ -16,11 +17,11 @@ import static org.lwjgl.opengl.GL30.*;
 public class LevelEditorScene extends Scene{
 
     private float[] vertexArray = {
-        // Positions             // Colour
-        100.5f,  -0.5f, 0.0f,    1.0f, 0.0f, 0.0f, 1.0f, // Bottom Right  // 0
-         -0.5f, 100.5f, 0.0f,    0.0f, 1.0f, 0.0f, 1.0f, // Top Left      // 1
-        100.5f, 100.5f, 0.0f,    0.0f, 0.0f, 1.0f, 1.0f, // Top Right     // 2
-         -0.5f,  -0.5f, 0.0f,    1.0f, 1.0f, 0.0f, 1.0f, // Bottom Left   // 3
+        // Positions             // Colour                 // UV Coords
+        100.5f,     0f, 0.0f,    1.0f, 0.0f, 0.0f, 1.0f,   1, 1, // Bottom Right  // 0
+            0f, 100.5f, 0.0f,    0.0f, 1.0f, 0.0f, 1.0f,   0, 0, // Top Left      // 1
+        100.5f, 100.5f, 0.0f,    0.0f, 0.0f, 1.0f, 1.0f,   1, 0, // Top Right     // 2
+            0f,     0f, 0.0f,    1.0f, 1.0f, 0.0f, 1.0f,   0, 1, // Bottom Left   // 3
     };
 
     // NTS: Counter clockwise order //
@@ -32,6 +33,7 @@ public class LevelEditorScene extends Scene{
     private int vaoID, vboID, eboID;
 
     private Shader defaultShader;
+    private Texture testTexture;
 
     public LevelEditorScene() {
     }
@@ -42,6 +44,7 @@ public class LevelEditorScene extends Scene{
         this.camera = new Camera(new Vector2f());
         defaultShader = new Shader("src/assets/shaders/default.glsl");
         defaultShader.compile();
+        this.testTexture = new Texture("src/assets/textures/testTexture.png");
 
         //// Generate VAO, VBO, and EBO buffer objects ////
 
@@ -70,14 +73,17 @@ public class LevelEditorScene extends Scene{
         // Vertex Attrib pointers //
         int positionsSize = 3;
         int colourSize = 4;
-        int floatSizeBytes = 4;
-        int vertexSizeBytes = (positionsSize + colourSize) * floatSizeBytes;
+        int uvSize = 2;
+        int vertexSizeBytes = (positionsSize + colourSize + uvSize) * Float.BYTES;
 
         glVertexAttribPointer(0, positionsSize, GL_FLOAT, false, vertexSizeBytes, 0);
         glEnableVertexAttribArray(0);
 
-        glVertexAttribPointer(1, colourSize, GL_FLOAT, false, vertexSizeBytes, positionsSize * floatSizeBytes);
+        glVertexAttribPointer(1, colourSize, GL_FLOAT, false, vertexSizeBytes, positionsSize * Float.BYTES);
         glEnableVertexAttribArray(1);
+
+        glVertexAttribPointer(2, uvSize, GL_FLOAT, false, vertexSizeBytes, (positionsSize + colourSize) * Float.BYTES);
+        glEnableVertexAttribArray(2);
     }
 
     @Override
@@ -85,7 +91,12 @@ public class LevelEditorScene extends Scene{
         // System.out.println("" + (1 / dt) + "FPS"); // FPS counter
 
         this.camera.position.x -= dt * 50f;
-        this.camera.position.y -= dt * 50f;
+        this.camera.position.y -= dt * 20f;
+
+        // Give texture to shader //
+        defaultShader.uploadTexture("TEX_SAMPLER", 0);
+        glActiveTexture(GL_TEXTURE0);
+        testTexture.bind();
 
         defaultShader.use();
         defaultShader.uploadMat4f("uProjection", camera.getProjectionMatrix());

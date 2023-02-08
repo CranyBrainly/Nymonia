@@ -1,4 +1,4 @@
-package com.nymostudios.engine.renderer;
+package net.cranydev.engine.renderer;
 
 import java.io.IOException;
 import java.nio.FloatBuffer;
@@ -177,5 +177,11 @@ public class Shader {
         int varLocation = glGetUniformLocation(shaderProgram, varName);
         use();
         glUniform1i(varLocation, val);
+    }
+
+    public void uploadTexture(String varName, int slot) {
+        int varLocation = glGetUniformLocation(shaderProgram, varName);
+        use();
+        glUniform1i(varLocation, slot);
     }
 }

@@ -1,4 +1,4 @@
-package com.nymostudios.engine.scenes;
+package net.cranydev.engine.scenes;
 
 public class LevelScene extends Scene {
     public LevelScene() {

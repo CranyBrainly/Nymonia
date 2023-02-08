@@ -1,6 +1,6 @@
-package com.nymostudios.engine.scenes;
+package net.cranydev.engine.scenes;
 
-import com.nymostudios.engine.renderer.Camera;
+import net.cranydev.engine.renderer.Camera;
 
 public abstract class Scene {
 
