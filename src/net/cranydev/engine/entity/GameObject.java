@@ -31,7 +31,7 @@ public class GameObject {
     public <T extends Component> void removeComponent(Class<T> compoenentClass) {
         for (int i = 0; i < components.size(); i++) {
             Component c = components.get(i);
-            if (compoenentClass.isAssignableFrom(components.getClass())) {
+            if (compoenentClass.isAssignableFrom(c.getClass())) {
                 components.remove(i);
                 return;
             }
