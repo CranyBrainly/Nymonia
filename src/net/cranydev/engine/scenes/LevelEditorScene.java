@@ -42,7 +42,7 @@ public class LevelEditorScene extends Scene{
     public void init() {
 
         this.camera = new Camera(new Vector2f());
-        defaultShader = new Shader("src/assets/shaders/default.glsl");
+        defaultShader = new Shader("src/net/cranydev/engine/shaders/default.glsl");
         defaultShader.compile();
         this.testTexture = new Texture("src/assets/textures/testTexture.png");
 
@@ -88,7 +88,7 @@ public class LevelEditorScene extends Scene{
 
     @Override
     public void update(float dt) {
-        // System.out.println("" + (1 / dt) + "FPS"); // FPS counter
+        System.out.println("" + (1 / dt) + "FPS"); // FPS counter
 
         this.camera.position.x -= dt * 50f;
         this.camera.position.y -= dt * 20f;

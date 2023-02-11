@@ -1,3 +1,3 @@
 ## This game is still in development.
-However if you want to test out the game, you can go to the [.jar tests](/prod/tests) and check 'em out. Or if you wanna look over "our" (terrible) code, you can go to the [source code](/src/com/nymostudios) and check that out too. If you find any problems or things that need to be fixed, you can let the "team" know in the issues tab.
+However if you want to test out the game, you can go to the [.jar tests](/prod/tests) and check 'em out. Or if you wanna look over my (terrible) code, you can go to the [source code](/src/net/cranydev) and check that out too. If you find any problems or things that need to be fixed, you can let the "team" know in the issues tab.
 #### I'm also following a [tutorial from GamesWithGabe](https://www.youtube.com/playlist?list=PLtrSb4XxIVbp8AKuEAlwNXDxr99e3woGE) to get me started.
